@@ -9,7 +9,10 @@ import UIKit
 
 var listOfWords = ["buccaneer", "swift", "glorius", "incandescent", "bug", "program"]
 
-let incorrectMovesAllowed: Int = 6
+let incorrectMovesAllowed: Int = 7
+
+var totalWins = 0
+var totalLosses = 0
 
 class ViewController: UIViewController {
 
@@ -22,9 +25,27 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
     }
+    //During a brief instance while app launches there wont be any value and to avoid the error and will cover the value in future
+    var currentGame: Game!
+    
+     func newRound() {
+         let newWord = listOfWords.removeFirst()
+         
+         currentGame = Game(word: newWord, incorrectMovesRemaing: incorrectMovesAllowed)
+         updateUI()
+    }
+    func updateUI() {
+        scoreLabel.text = "Wins: \(totalWins), Losses: \(totalLosses)"
+        treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaing)")
+    }
 
     @IBAction func letterButtonAction(_ sender: UIButton) {
         sender.isEnabled = false
+        
+        let letterString = sender.configuration!.title!
+        let letter = Character(letterString.lowercased())
+        
+        
     }
 }
 
