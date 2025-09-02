@@ -41,6 +41,7 @@ class ViewController: UIViewController {
             letters.append(String(letter))
         }
         let wordWithSpacing = letters.joined(separator: " ")
+        //consider replacing the constant with a _ due to no declarations
         correctWordLabel.text = currentGame.formattedWord
         
         
@@ -54,10 +55,20 @@ class ViewController: UIViewController {
         let letterString = sender.configuration!.title!
         let letter = Character(letterString.lowercased())
         currentGame.playerGuessed(letter: letter)
-        updateUI() //to updateUI everytime button is pressed
-        
-        
-        
+//        updateUI() //to updateUI everytime button is pressed
+        updateGameState()
+ 
     }
+    
+    func updateGameState() {
+        if currentGame.incorrectMovesRemaing == 0 {
+            totalLosses += 1
+        } else if currentGame.word == currentGame.formattedWord {
+            totalWins += 1
+        } else {
+            updateUI()
+        }
+    }
+    
 }
 
