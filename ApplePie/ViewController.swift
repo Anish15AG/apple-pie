@@ -11,10 +11,21 @@ var listOfWords = ["buccaneer", "swift", "glorius", "incandescent", "bug", "prog
 
 let incorrectMovesAllowed: Int = 7
 
-var totalWins = 0
-var totalLosses = 0
 
 class ViewController: UIViewController {
+    
+    //using didSet to check whether new value has been updated in the property
+    var totalWins = 0 {
+        didSet{
+            newRound()
+        }
+    }
+
+    var totalLosses = 0 {
+        didSet{
+            newRound()
+        }
+    }
 
     @IBOutlet weak var treeImageView: UIImageView!
     @IBOutlet weak var correctWordLabel: UILabel!
@@ -30,18 +41,31 @@ class ViewController: UIViewController {
     var currentGame: Game!
     
      func newRound() {
-         let newWord = listOfWords.removeFirst()
-         
-         currentGame = Game(word: newWord, incorrectMovesRemaing: incorrectMovesAllowed, guessedLetters: [])
-         updateUI()
+         if !listOfWords.isEmpty {
+             let newWord = listOfWords.removeFirst()
+             
+             currentGame = Game(word: newWord, incorrectMovesRemaing: incorrectMovesAllowed, guessedLetters: [])
+             enableLetterButtons(true)
+             updateUI()
+         } else {
+             enableLetterButtons(false)
+         }
     }
+    
+    func enableLetterButtons(_ enable: Bool) {
+        for button in letterButtons {
+            button.isEnabled = enable
+        }
+    }
+    
+    
     func updateUI() {
         var letters = [String]()
         for letter in currentGame.formattedWord{
             letters.append(String(letter))
         }
         let wordWithSpacing = letters.joined(separator: " ")
-        //consider replacing the constant with a _ due to no declarations
+        //Initialization of immutable value 'wordWithSpacing' was never used; consider replacing with assignment to '_' or removing it
         correctWordLabel.text = currentGame.formattedWord
         
         
