@@ -24,6 +24,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        newRound()
     }
     //During a brief instance while app launches there wont be any value and to avoid the error and will cover the value in future
     var currentGame: Game!
@@ -31,10 +32,18 @@ class ViewController: UIViewController {
      func newRound() {
          let newWord = listOfWords.removeFirst()
          
-         currentGame = Game(word: newWord, incorrectMovesRemaing: incorrectMovesAllowed)
+         currentGame = Game(word: newWord, incorrectMovesRemaing: incorrectMovesAllowed, guessedLetters: [])
          updateUI()
     }
     func updateUI() {
+        var letters = [String]()
+        for letter in currentGame.formattedWord{
+            letters.append(String(letter))
+        }
+        let wordWithSpacing = letters.joined(separator: " ")
+        correctWordLabel.text = currentGame.formattedWord
+        
+        
         scoreLabel.text = "Wins: \(totalWins), Losses: \(totalLosses)"
         treeImageView.image = UIImage(named: "Tree \(currentGame.incorrectMovesRemaing)")
     }
@@ -44,6 +53,9 @@ class ViewController: UIViewController {
         
         let letterString = sender.configuration!.title!
         let letter = Character(letterString.lowercased())
+        currentGame.playerGuessed(letter: letter)
+        updateUI() //to updateUI everytime button is pressed
+        
         
         
     }
